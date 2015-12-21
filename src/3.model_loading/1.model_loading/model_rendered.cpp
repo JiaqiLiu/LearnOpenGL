@@ -75,7 +75,11 @@ int main()
     Shader shader("shader.vs", "shader.frag");
 
     // Load models
-    Model ourModel(FileSystem::getPath("resources/objects/nanosuit/nanosuit.obj").c_str());
+    //Model ourModel(FileSystem::getPath("resources/objects/nanosuit/nanosuit.obj").c_str());
+    //Model ourModel(FileSystem::getPath("resources/objects/rock/Rock1.obj").c_str());
+    //Model ourModel(FileSystem::getPath("resources/objects/MyPainting/1a30adabf5a2bb848af30108ea9ccb6c.obj").c_str());
+    //Model ourModel(FileSystem::getPath("resources/objects/MyTools/a7b6044092427429e40f510eabd4b76f.obj").c_str());
+    Model ourModel(FileSystem::getPath("resources/objects/don/ef3d038046cab5cabeb3159acb187cec.obj").c_str());
 
     // Draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

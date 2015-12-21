@@ -101,10 +101,14 @@ private:
             vector.z = mesh->mVertices[i].z;
             vertex.Position = vector;
             // Normals
-            vector.x = mesh->mNormals[i].x;
-            vector.y = mesh->mNormals[i].y;
-            vector.z = mesh->mNormals[i].z;
-            vertex.Normal = vector;
+            if (mesh->HasNormals()) {
+              vector.x = mesh->mNormals[i].x;
+              vector.y = mesh->mNormals[i].y;
+              vector.z = mesh->mNormals[i].z;
+              vertex.Normal = vector;
+            } else {
+              vertex.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+            }
             // Texture Coordinates
             if(mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
             {
@@ -118,15 +122,23 @@ private:
             else
                 vertex.TexCoords = glm::vec2(0.0f, 0.0f);
             // Tangent
-            vector.x = mesh->mTangents[i].x;
-            vector.y = mesh->mTangents[i].y;
-            vector.z = mesh->mTangents[i].z;
-            vertex.Tangent = vector;
             // Bitangent
-            vector.x = mesh->mBitangents[i].x;
-            vector.y = mesh->mBitangents[i].y;
-            vector.z = mesh->mBitangents[i].z;
-            vertex.Bitangent = vector;
+            // Jiaqi: Here, you should also check presence like Texture.
+            if (mesh->HasTangentsAndBitangents()) {
+              vector.x = mesh->mTangents[i].x;
+              vector.y = mesh->mTangents[i].y;
+              vector.z = mesh->mTangents[i].z;
+              vertex.Tangent = vector;
+
+              vector.x = mesh->mBitangents[i].x;
+              vector.y = mesh->mBitangents[i].y;
+              vector.z = mesh->mBitangents[i].z;
+              vertex.Bitangent = vector;
+            } else {
+              vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
+              vertex.Bitangent = glm::vec3(0.0f, 0.0f, 0.0f);
+            }
+
             vertices.push_back(vertex);
         }
         // Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -155,10 +167,10 @@ private:
             vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
             textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
             // 3. Normal maps
-            std::vector<Texture> normalMaps = this->loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+            std::vector<Texture> normalMaps = this->loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
             textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
             // 4. Height maps
-            std::vector<Texture> heightMaps = this->loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+            std::vector<Texture> heightMaps = this->loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_height");
             textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
         }
         

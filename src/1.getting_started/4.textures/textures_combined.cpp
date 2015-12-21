@@ -144,9 +144,9 @@ int main()
 
 
         // Bind Textures using texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
+        glActiveTexture(GL_TEXTURE0); // Jiaqi: active unit 0.
+        glBindTexture(GL_TEXTURE_2D, texture1); // Jiaqi: Bind texture1 to unit 0. Then unit 0 can get data from texture buffer 1. 
+        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0); // Jiaqi: tell shader, the data of ourTexture1, is from unit 0. Then we can get the real data. :-)
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
         glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);

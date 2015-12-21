@@ -26,7 +26,7 @@ struct Vertex {
 };
 
 struct Texture {
-    GLuint id;
+    GLuint id;  // Jiaqi: If I want to use this structure, I just change this into QTexture. This will be fine. 
     string type;
     aiString path;
 };
@@ -61,6 +61,7 @@ public:
         GLuint heightNr = 1;
         for(GLuint i = 0; i < this->textures.size(); i++)
         {
+          // Jiaqi: This is the right way to active texture. From official webpage. 
             glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
             // Retrieve texture number (the N in diffuse_textureN)
             stringstream ss;
@@ -76,7 +77,11 @@ public:
                 ss << heightNr++; // Transfer GLuint to stream
             number = ss.str(); 
             // Now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(shader.Program, (name + number).c_str()), i);
+            //glUniform1i(glGetUniformLocation(shader.Program, (name + number).c_str()), i);
+            // Jiaqi: 
+            // "If location is equal to -1, the data passed in will be silently ignored and the specified uniform variable will not be changed."
+            GLint addr = glGetUniformLocation(shader.Program, (name + number).c_str());
+            glUniform1i(addr, i);
             // And finally bind the texture
             glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
         }
@@ -113,6 +118,7 @@ private:
         // A great thing about structs is that their memory layout is sequential for all its items.
         // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
         // again translates to 3/2 floats which translates to a byte array.
+        // Jiaqi: So brilliant!!!
         glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex), &this->vertices[0], GL_STATIC_DRAW);  
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
